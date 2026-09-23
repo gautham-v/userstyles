@@ -1,0 +1,101 @@
+/* ==UserStyle==
+@name           Google Calendar — Calm
+@namespace      gautham/userstyles
+@version        1.2.0
+@description    Warm dark + paper light Google Calendar: quiet grid, softened event colors, no Gemini/side panel/upsell noise.
+@preprocessor   default
+@var color bg      "Background"  #181816
+@var color surface "Surface"     #20201e
+@var color line    "Borders"     #2c2c29
+@var color text    "Text"        #d6d3cc
+@var color dim     "Dim text"    #8b8881
+@var color accent  "Accent"      #e9e3d8
+@var color lbg      "Light · Background"  #f6f4ef
+@var color lsurface "Light · Surface"     #eeebe4
+@var color lline    "Light · Borders"     #e2ded5
+@var color ltext    "Light · Text"        #2b2a26
+@var color ldim     "Light · Dim text"    #77736b
+@var color laccent  "Light · Accent"      #1d1b17
+@var checkbox navHide "Left sidebar: fade until hovered" 0
+==/UserStyle== */
+
+/* Follows Calendar's own Appearance setting (Settings → Appearance:
+   Light / Dark / Device default). Calendar puts .CcsDpe on <body> when
+   dark; without it, the light palette applies. Colors are applied by
+   overriding Google's Material 3 tokens (--gm3-sys-color-*), which the
+   whole UI reads, so few obfuscated class names are needed. Turn Dark
+   Reader off for calendar.google.com, or it will fight this. */
+
+@-moz-document domain("calendar.google.com") {
+  body.DO879e:not(.CcsDpe) {
+    --bg: var(--lbg); --surface: var(--lsurface); --line: var(--lline);
+    --text: var(--ltext); --dim: var(--ldim); --accent: var(--laccent);
+  }
+
+  /* ---------- palette: Material 3 tokens ---------- */
+  body.DO879e {
+    --gm3-sys-color-background: var(--bg) !important;
+    --gm3-sys-color-surface: var(--bg) !important;
+    --gm3-sys-color-surface-dim: var(--bg) !important;
+    --gm3-sys-color-surface-container-lowest: var(--bg) !important;
+    --gm3-sys-color-surface-container-low: var(--bg) !important;
+    --gm3-sys-color-surface-container: var(--surface) !important;
+    --gm3-sys-color-surface-container-high: var(--surface) !important;
+    --gm3-sys-color-surface-container-highest: color-mix(in srgb, var(--text) 10%, var(--surface)) !important;
+    --gm3-sys-color-surface-bright: color-mix(in srgb, var(--text) 10%, var(--surface)) !important;
+    --gm3-sys-color-surface-variant: var(--line) !important;
+    --gm3-sys-color-on-background: var(--text) !important;
+    --gm3-sys-color-on-surface: var(--text) !important;
+    --gm3-sys-color-on-surface-variant: var(--dim) !important;
+    --gm3-sys-color-outline: var(--dim) !important;
+    --gm3-sys-color-outline-variant: color-mix(in srgb, var(--line) 60%, var(--bg)) !important;
+    --gm3-sys-color-primary: var(--accent) !important;
+    --gm3-sys-color-on-primary: var(--bg) !important;
+    --gm3-sys-color-primary-container: color-mix(in srgb, var(--accent) 25%, var(--bg)) !important;
+    --gm3-sys-color-on-primary-container: var(--text) !important;
+    --gm3-sys-color-secondary: var(--accent) !important;
+    --gm3-sys-color-secondary-container: color-mix(in srgb, var(--accent) 18%, var(--bg)) !important;
+    --gm3-sys-color-on-secondary-container: var(--text) !important;
+    --gm3-sys-color-surface-tint: var(--accent) !important;
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+  }
+
+  /* ---------- grid ---------- */
+  /* event chips: keep each calendar's color, but as a soft tint of it.
+     A veil of the page color sits between the chip's fill and its text. */
+  [data-eventchip][style*="background-color"],
+  [data-eventchip] [style*="background-color"] { isolation: isolate; border-color: transparent !important; background-clip: padding-box !important; }
+  [data-eventchip] [style*="background-color"] { position: relative; }
+  [data-eventchip][style*="background-color"]::before,
+  [data-eventchip] [style*="background-color"]::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    border-radius: inherit; background: var(--bg); opacity: 0.64;
+  }
+  [data-eventchip], [data-eventchip] * { color: var(--text) !important; }
+  /* the arrow on multi-day chips is a colored border triangle */
+  [data-eventchip] .PxbABe { opacity: 0.4; }
+
+  /* current-time line and dot: accent instead of red */
+  .LvQ60d { background-color: var(--accent) !important; }
+  .rGFpCd, .KLPWzf.l36Xze, .tEVydc.A9Yu7d { border-color: var(--accent) !important; }
+
+  /* ---------- noise removal ---------- */
+  /* Gemini */
+  [aria-label*="Gemini" i], [data-tooltip*="Gemini" i] { display: none !important; }
+  /* Upgrade (Google One) button */
+  button[aria-label="Upgrade"] { display: none !important; }
+  /* right side panel (Keep/Tasks/Contacts/Maps/add-ons) and its show/hide tab */
+  [role="complementary"][aria-label="Side panel"], .Kk7lMc-QWPxkf-LgbsSe-haAclf { display: none !important; }
+  /* Booking pages section in the left sidebar */
+  [role="complementary"][aria-label="Booking pages"] { display: none !important; }
+  /* Terms – Privacy footer */
+  .erDb5d { display: none !important; }
+
+  /* ---------- left sidebar fade: mini calendar + calendar list (Create stays visible) ---------- */
+  .hEtGGf.HDIIVe.sBn5T {
+    opacity: calc(1 - var(--navHide) * 0.5);
+    transition: opacity 0.2s ease;
+  }
+  .hEtGGf.HDIIVe.sBn5T:hover, .hEtGGf.HDIIVe.sBn5T:focus-within { opacity: 1; }
+}

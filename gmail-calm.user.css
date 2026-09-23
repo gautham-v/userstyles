@@ -1,0 +1,114 @@
+/* ==UserStyle==
+@name           Gmail — Calm
+@namespace      gautham/userstyles
+@version        1.2.0
+@description    Light-touch Gmail: warm dark + paper light palettes, no Gemini/side panel/storage/footer noise.
+@preprocessor   default
+@var color bg      "Background"  #181816
+@var color surface "Surface"     #20201e
+@var color line    "Borders"     #2c2c29
+@var color text    "Text"        #d6d3cc
+@var color dim     "Dim text"    #8b8881
+@var color accent  "Accent"      #e9e3d8
+@var color lbg      "Light · Background"  #f6f4ef
+@var color lsurface "Light · Surface"     #eeebe4
+@var color lline    "Light · Borders"     #e2ded5
+@var color ltext    "Light · Text"        #2b2a26
+@var color ldim     "Light · Dim text"    #77736b
+@var color laccent  "Light · Accent"      #1d1b17
+@var checkbox navHide "Left nav: fade labels until hovered" 1
+==/UserStyle== */
+
+/* Built on Gmail's "Default" theme (Settings → Themes). Gmail has no
+   auto light/dark, so the palette follows macOS appearance instead:
+   dark vars by default, light vars when the OS is light. Turn Dark
+   Reader off for mail.google.com, or it will fight this. Gmail's class
+   names are obfuscated but have been stable for years. */
+
+@-moz-document domain("mail.google.com") {
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: var(--lbg); --surface: var(--lsurface); --line: var(--lline);
+      --text: var(--ltext); --dim: var(--ldim); --accent: var(--laccent);
+    }
+  }
+  :root { color-scheme: light dark; }
+
+  /* ---------- palette ---------- */
+  /* page frame (behind the rounded panel) */
+  body.aAU, .aAT, .aAU .wl, .w-asu { background-color: var(--surface) !important; }
+  /* the rounded main panel, message list, reading pane */
+  .aeJ, .Tm, .aeF, .aeF .nH, .ar4, .nH.if, .aDP, .aeH, .G-atb, .Cq.aqL {
+    background-color: var(--bg) !important;
+  }
+  body.aAU, .aeN, .aeF, header[role="banner"] { color: var(--text) !important; }
+
+  /* search box */
+  form[role="search"] { background-color: var(--bg) !important; box-shadow: 0 0 0 1px var(--line) !important; }
+  form[role="search"] input { color: var(--text) !important; }
+  form[role="search"] input::placeholder { color: var(--dim) !important; }
+
+  /* compose button: quiet outline instead of a blue slab */
+  .aic .T-I-KE { background-color: var(--bg) !important; color: var(--text) !important;
+                 box-shadow: 0 0 0 1px var(--line) !important; }
+
+  /* left nav: current folder + hover */
+  .aeN .TO.nZ, .aeN .TO.nZ:hover { background-color: color-mix(in srgb, var(--accent) 22%, var(--surface)) !important; }
+  .aeN .TO:hover { background-color: color-mix(in srgb, var(--text) 7%, transparent) !important; }
+  .aeN .TO *, .aeN .nU, .aeN .n0, .aeN .bsU { color: var(--text) !important; }
+
+  /* message list rows */
+  tr.zA, tr.zA.zE, tr.zA.yO { background-color: var(--bg) !important; }
+  tr.zA { border-bottom: 1px solid var(--line) !important; box-shadow: none !important; }
+  tr.zA:hover { background-color: var(--surface) !important; }
+  tr.zA.x7 { background-color: color-mix(in srgb, var(--accent) 20%, var(--bg)) !important; }
+  tr.zA .yW, tr.zA .bog, tr.zA .bqe { color: var(--text) !important; }  /* sender, subject */
+  tr.zA .y2, tr.zA .xW, tr.zA.yO .yW { color: var(--dim) !important; }  /* snippet, date, read sender */
+  .aKh, .aKk, .G-atb { border-color: var(--line) !important; }          /* list toolbar, tabs */
+  /* label chips on rows: one quiet tone instead of per-label colors */
+  tr.zA .at { background-color: var(--surface) !important; border-color: var(--line) !important; }
+  tr.zA .au { border-color: var(--line) !important; }
+  tr.zA .av { color: var(--dim) !important; }
+  /* search filter chips (From / Any time / Has attachment …) */
+  .aeF .HW { background-color: var(--bg) !important; border-color: var(--line) !important; }
+  .aeF .HW, .aeF .HW * { color: var(--dim) !important; }
+  .aeF .N5, .aeF .N5 * { color: var(--accent) !important; }
+
+  /* empty folder ("No new mail!") row and the Loading… toast */
+  table.TB tr.TD { background: transparent !important; }
+  table.TB tr.TD td { color: var(--dim) !important; }
+  .b8 .vh { background: var(--surface) !important; color: var(--text) !important; border: 1px solid var(--line) !important; }
+
+  /* reading pane */
+  .hP, .gD, .ii, .a3s { color: var(--text) !important; }
+  .g3, .go, .hb, .ajn { color: var(--dim) !important; }
+  .a3s a, .aeF a[href]:not([role]) { color: var(--accent) !important; }
+
+  /* menus, dialogs, compose window */
+  .J-M, .Kj-JD, .AD, .aoI, .I5, .aoD { background-color: var(--bg) !important; color: var(--text) !important; }
+
+  /* icons (GM3 draws most as dark glyphs): lift them in dark mode */
+  @media (prefers-color-scheme: dark) {
+    .aeN .qj, .aeN .TN .aHS-bnt, .G-atb .asa, .G-atb .asf, .aeH .asa, .asa,
+    header[role="banner"] svg:not([class*="logo"]), form[role="search"] svg,
+    .T-I-KE .aic, .bjy, .aeN svg { filter: invert(0.85) !important; }
+    .aic .T-I-KE::before { filter: invert(0.85) !important; }
+  }
+
+  /* ---------- noise removal ---------- */
+  /* Gemini */
+  [aria-label*="Gemini" i], [data-tooltip*="Gemini" i] { display: none !important; }
+  /* right side panel (Calendar/Keep/Tasks) and its show/hide tab */
+  .brC-aT5-aOt-Jw, .brC-dA-I-Jw, .bAw.bcf.it { display: none !important; }
+  /* storage meter, Terms/Privacy footer, last account activity */
+  .aiF, .ajd, .ma, .l2.pfiaof { display: none !important; }
+  /* "Get the Gmail app" / upsell promos */
+  .bcB[href*="one.google.com"], .aKv, .bAq { display: none !important; }
+
+  /* ---------- left nav fade (compose stays visible) ---------- */
+  .aeN .V3 {
+    opacity: calc(1 - var(--navHide) * 0.6);
+    transition: opacity 0.2s ease;
+  }
+  .aeN:hover .V3, .aeN:focus-within .V3 { opacity: 1; }
+}

@@ -1,0 +1,110 @@
+/* ==UserStyle==
+@name           Yahoo Fantasy — Calm
+@namespace      gautham/userstyles
+@version        1.0.0
+@description    Warm monochrome Yahoo Fantasy Football: rosters, matchups and standings without ads, betting, Plus upsells or video.
+@preprocessor   default
+@var color bg      "Background"  #181816
+@var color surface "Surface"     #20201e
+@var color line    "Borders"     #2c2c29
+@var color text    "Text"        #d6d3cc
+@var color dim     "Dim text"    #8b8881
+@var color accent  "Accent"      #e9e3d8
+@var color lbg      "Light · Background"  #f6f4ef
+@var color lsurface "Light · Surface"     #eeebe4
+@var color lline    "Light · Borders"     #e2ded5
+@var color ltext    "Light · Text"        #2b2a26
+@var color ldim     "Light · Dim text"    #77736b
+@var color laccent  "Light · Accent"      #1d1b17
+@var checkbox navHide "League nav: fade until hovered" 0
+==/UserStyle== */
+
+/* Yahoo Fantasy's league pages are old YUI markup with atomic classes
+   and a hard-coded light look (the body's "DarkTheme" class does not
+   change it), so the palette follows macOS appearance and the page is
+   flattened: every element loses its own background and text color,
+   then cards, tables, menus and popups get the palette back. Headshots,
+   team logos and charts are left alone. Turn Dark Reader off for
+   yahoo.com, or it will fight this. */
+
+@-moz-document domain("football.fantasysports.yahoo.com") {
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: var(--lbg); --surface: var(--lsurface); --line: var(--lline);
+      --text: var(--ltext); --dim: var(--ldim); --accent: var(--laccent);
+    }
+  }
+  :root { color-scheme: light dark; }
+
+  /* ---------- palette: flatten everything ---------- */
+  html, body { background: var(--bg) !important; color: var(--text) !important; }
+  body *:not(img):not(picture):not(video):not(canvas):not(iframe):not(svg):not(svg *) {
+    background-color: transparent !important;
+    border-color: var(--line) !important;
+    color: var(--text) !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  body::before, body::after, body *::before, body *::after {
+    background-color: transparent !important;   /* white side fillers and page backdrops are pseudo-elements */
+    border-color: var(--line) !important;
+  }
+  svg { fill: currentColor; }
+
+  /* ---------- palette: give surfaces back ---------- */
+  /* cards and modules */
+  section.Mod:not(.Mod-plain), .Tst-matchups-header ~ *, #matchupweek, .Table-plain thead,
+  table thead th { background-color: var(--surface) !important; }
+  /* menus, dropdowns, popovers, dialogs, player cards: must stay opaque */
+  .nav-item-flyout, #ybar-l1-more-menu, #ybarAccountMenuBody, ._yb_bkrga4,
+  [role="menu"], [role="listbox"], [role="dialog"], [role="tooltip"],
+  .yui3-overlay, .yui3-panel, .yui3-widget-bd, .Overlay, .Popover, [class*="popover" i],
+  [class*="Flyout" i], [class*="flyout" i], [class*="Dropdown" i] ul, [class*="Menu-content" i],
+  .ysf-player-card, #yspplayercard, [class*="playercard" i], [class*="PlayerCard" i],
+  .Modal, [class*="modal" i] > div { background-color: var(--surface) !important; }
+  /* the dimming scrim behind player cards and dialogs */
+  .yui3-overlay-mask, .yui3-widget-mask, [class*="scrim" i] { background-color: rgb(0 0 0 / 0.55) !important; }
+  /* sticky bars sit over scrolling content, so they need the page color */
+  #ybar, #ybar-inner-wrap, .Navtarget, #yspnav, .Page-hd, [class*="Sticky" i] { background-color: var(--bg) !important; }
+  /* inputs */
+  input, select, textarea, #ybar-sbq { background-color: var(--surface) !important; }
+
+  /* ---------- text hierarchy ---------- */
+  .F-shade, .F-faded, .Fz-xs.F-shade, .ysf-player-status + *, .Ta-end .F-faded,
+  small, time, .Fz-xxs, .F-reset.F-shade, th, th * { color: var(--dim) !important; }
+  a:hover { text-decoration: underline; }
+  /* selected tab / active nav item: quiet underline in the accent */
+  .Navitem.Selected::after, .Navitem.selected::after { background-color: var(--accent) !important; }
+  .Navitem.Selected, .Navitem.selected, [class*="Selected"] > a, [aria-selected="true"], [aria-current="page"],
+  .Selected, .selected { border-color: var(--accent) !important; }
+  /* injury and status tags (Q, O, IR, D): keep them legible, muted */
+  .ysf-player-status, .F-injury, [class*="injury" i], .F-negative, .F-positive {
+    color: var(--accent) !important; font-weight: 600;
+  }
+  /* win-probability and projection bars keep their shape, lose the color */
+  [class*="probability" i] *, [class*="Prob" i] * { filter: saturate(0.2); }
+  /* filled buttons read as outlines */
+  .Btn, button.Btn-primary, .Btn-secondary { border: 1px solid var(--line) !important; }
+
+  /* ---------- noise removal ---------- */
+  /* ads (the "benji" slots) and the empty frames they sit in */
+  #yspmh.Page-masthead, .Page-masthead { min-height: 0 !important; height: auto !important; }
+  .ysfbenji, [id^="ad_"], [id*="-ad-"], [class*="darla" i], [id*="darla" i],
+  [id^="sda-"], [class*="sponsor" i], [id*="sponsor" i] { display: none !important; }
+  /* betting and odds */
+  a[href*="/betting"], a[href*="sportsbook"], a[href*="bet.yahoo"], a[href*="betmgm"],
+  a[href*="draftkings"], a[href*="fanduel"], [class*="odds" i]:not(body):not(html) { display: none !important; }
+  /* Fantasy Plus / premium upsells, daily fantasy, video shows, app banners */
+  a[href*="/lp/plus"], a[href*="fantasyplus"], a[href*="/dfs"], a[href*="dailyfantasy"],
+  a[href*="/videos/"], [class*="upsell" i], [class*="Upsell" i], [class*="app-banner" i],
+  [class*="appPromo" i], video, div:has(> a[href*="/lp/plus"]) { display: none !important; }
+  /* the pink Plus badge on paywalled tabs: keep the tab, drop the color */
+  .Bg-yahoo-plus-gradient-font, [class*="plus-gradient" i] { filter: grayscale(1); }
+
+  /* ---------- league nav: links faded until hovered (off by default) ---------- */
+  #yspsubnav, .Navtarget ul {
+    opacity: calc(1 - var(--navHide) * 0.6);
+    transition: opacity 0.2s ease;
+  }
+  #yspsubnav:hover, #yspsubnav:focus-within, .Navtarget ul:hover, .Navtarget ul:focus-within { opacity: 1; }
+}

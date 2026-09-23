@@ -1,0 +1,154 @@
+/* ==UserStyle==
+@name           ESPN — Calm
+@namespace      gautham/userstyles
+@version        1.1.0
+@description    Warm monochrome ESPN: scores, schedules and stories without betting, tickets, ESPN+ upsells, ads or autoplay video.
+@preprocessor   default
+@var color bg      "Background"  #181816
+@var color surface "Surface"     #20201e
+@var color line    "Borders"     #2c2c29
+@var color text    "Text"        #d6d3cc
+@var color dim     "Dim text"    #8b8881
+@var color accent  "Accent"      #e9e3d8
+@var color lbg      "Light · Background"  #f6f4ef
+@var color lsurface "Light · Surface"     #eeebe4
+@var color lline    "Light · Borders"     #e2ded5
+@var color ltext    "Light · Text"        #2b2a26
+@var color ldim     "Light · Dim text"    #77736b
+@var color laccent  "Light · Accent"      #1d1b17
+@var checkbox navHide "Top nav: fade until hovered" 1
+==/UserStyle== */
+
+/* ESPN is light-only and has no color tokens, so the palette follows
+   macOS appearance (dark vars by default, light vars when the OS is
+   light) and the page is flattened: every element loses its own
+   background and text color, then cards, menus and sticky bars get
+   the palette back. Team logos, photos and charts are left alone.
+   Pages are a mix of the older "classic" markup (homepage) and the
+   newer one (Site__Header, Card, clr-gray-NN utility classes).
+   Turn Dark Reader off for espn.com, or it will fight this. */
+
+@-moz-document domain("espn.com") {
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: var(--lbg); --surface: var(--lsurface); --line: var(--lline);
+      --text: var(--ltext); --dim: var(--ldim); --accent: var(--laccent);
+    }
+  }
+  :root { color-scheme: light dark; }
+
+  /* ---------- palette: flatten everything ---------- */
+  html, body { background: var(--bg) !important; color: var(--text) !important; }
+  body *:not(img):not(picture):not(video):not(canvas):not(iframe):not(svg):not(svg *) {
+    background-color: transparent !important;
+    border-color: var(--line) !important;
+    color: var(--text) !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  body *::before, body *::after { border-color: var(--line) !important; }
+  svg:not([class*="logo" i]) { fill: currentColor; }
+
+  /* ---------- palette: give surfaces back ---------- */
+  /* cards and modules */
+  .Card, section.Card, .contentItem, article.module, article.sub-module,
+  .cscore, .headlineStack, section.module, .PageLayout__Main .Card,
+  .Table__Scroller, .ResponsiveTable { background-color: var(--surface) !important; }
+  /* menus, dropdowns, popovers, dialogs: must stay opaque */
+  .dropdown-menu, .submenu-wrapper, .dropdown-container, ul.split, ul.editions,
+  [role="menu"], [role="listbox"], [role="dialog"], [class*="Dropdown__Menu"],
+  [class*="Popover"], [class*="Modal__Content"], [class*="Tooltip"],
+  .Nav__Dropdown, .Nav__Primary__Menu__Dropdown { background-color: var(--surface) !important; }
+  /* sticky bars sit over scrolling content, so they need the page color */
+  .Site__Header, .Nav__Primary, .Nav__Secondary, #global-nav, #global-nav-secondary,
+  .global-nav-container, .scores-carousel, #header-wrapper,
+  .sticky-header, [class*="Sticky"], [class*="sticky"] { background-color: var(--bg) !important; }
+  .Card [class*="sticky" i] { background-color: var(--surface) !important; }
+
+  /* ---------- text hierarchy ---------- */
+  .clr-gray-03, .clr-gray-04, .clr-gray-05, .clr-gray-06, .clr-gray-07,
+  .contentMeta, .contentMeta *, .timestamp, time, .time-elapsed, .author,
+  .ScoreboardScoreCell__Record, .ScoreCell__Record, .Table__TH, .Table__TH *,
+  figcaption, .caption { color: var(--dim) !important; }
+  a:hover { text-decoration: underline; }
+  .fill-clr-link, .fill-clr-link * { fill: var(--accent) !important; }
+  .fill-clr-white, .fill-clr-white * { fill: currentColor !important; }  /* header icons in light mode */
+  /* selected tab / active nav item: quiet underline in the accent */
+  [class*="--active"]:not(svg), [aria-selected="true"], [aria-current="page"] {
+    border-color: var(--accent) !important;
+  }
+  /* filled buttons read as outlines */
+  .Button:not(.Button--unstyled), .button, .btn { border: 1px solid var(--line) !important; }
+
+  /* ESPN logo: drop the red slab (two skewed pseudo-elements), keep the
+     white wordmark, and darken it in light mode */
+  .Nav__Primary__Branding::before, .Nav__Primary__Branding::after,
+  .logo-header::before, .logo-header::after { display: none !important; }
+  .Nav__Primary__Branding { opacity: 0.85; }
+  @media (prefers-color-scheme: light) { .Nav__Primary__Branding, .logo-header a { filter: invert(1); } }
+  /* team-color gradients behind game headers and story cards */
+  .Gamestrip__Container *:not(img):not(picture):not(svg):not(svg *) { background-image: none !important; }
+  .contentItem__teamBorder { display: none !important; }
+
+  /* ---------- reading ---------- */
+  .article-body p, .article-body li, .Story__Body p {
+    line-height: 1.6 !important;
+    color: var(--text) !important;
+  }
+
+  /* ---------- noise removal ---------- */
+  /* ads and sponsored units */
+  .Ad, .ad-slot, [class*="ad-banner"], [id^="ad-"], [id^="google_ads"],
+  [class*="AdSlot"], .sponsored-headlines, [class*="sponsored" i],
+  [class*="dtc-upsell"], [data-slot-type] { display: none !important; }
+  /* betting: odds strips, sportsbook links and logos */
+  .Card__Header__SubLink--presby,                      /* "Odds by DraftKings" */
+  .OddsStripWrapper, .oddsStrip, [class*="Odds" i]:not(body):not(html), .betLogo,
+  [class*="espnbet" i], [class*="Betting" i],
+  a[href*="espnbet"], a[href*="sportsbook"], a[href*="draftkings"], a[href*="fanduel"],
+  a[href*="/betting"], a[href*="/odds"] { display: none !important; }
+  /* tickets */
+  .ScoreboardEventInfo__TicketContainer, [class*="Ticket" i]:not(body),
+  a[href*="vividseats"], a[href*="ticketmaster"], a[href*="seatgeek"] { display: none !important; }
+  /* ESPN+ / Watch / app / fantasy / newsletter upsells */
+  a[href*="plus.espn.com"], a[href*="/espnplus"], [class*="espn-plus" i],
+  [class*="AppBanner" i], .smart-banner, [class*="app-promo" i],
+  [class*="fantasy-promo" i], [class*="newsletter" i],
+  [class*="Promo" i]:not(body):not(html),
+  .Card.QuickLinks:has(a[href*="/watch"]),            /* "Watch on ESPN" */
+  .Card.Upsell, [class*="Upsell"],                    /* "Watch X @ Y Live" */
+  [class*="fantasySignup"],
+  .Nav__Primary a[href*="fantasy"], .Nav__Secondary a[href*="fantasy"],
+  .Nav__Primary a[href*="where-to-watch"], .Nav__Secondary a[href*="where-to-watch"],
+  #global-nav a[href*="fantasy.espn"], #global-nav-secondary a[href*="fantasy.espn"],
+  #global-nav a[href*="where-to-watch"], #global-nav-secondary a[href*="where-to-watch"] { display: none !important; }
+  /* homepage: the lead video player and the clip carousel (headlines stay) */
+  body.index .contentItem__content--fullWidth figure.media-wrapper.video,
+  body.index .contentItem__content--video figure.media-wrapper.video,
+  .miniCardCarousel { display: none !important; }
+
+  /* ---------- league nav: links faded until hovered ----------
+     (the bar itself stays opaque: it's sticky over the page) */
+  .Nav__Secondary__Inner, #global-nav-secondary .global-nav-container > * {
+    opacity: calc(1 - var(--navHide) * 0.6);
+    transition: opacity 0.2s ease;
+  }
+  .Nav__Secondary:hover .Nav__Secondary__Inner, .Nav__Secondary:focus-within .Nav__Secondary__Inner,
+  #global-nav-secondary:hover .global-nav-container > *,
+  #global-nav-secondary:focus-within .global-nav-container > * { opacity: 1; }
+
+  /* ---------- fixes after first install ---------- */
+  /* betting stories are hidden by their links; drop the card slot too, or it leaves a blank box */
+  [class*="contentItem__content"]:has(> a[href*="/betting"], > a[href*="/odds"], > a[href*="espnbet"]) { display: none !important; }
+  /* league-nav dropdowns (Schedule, Stats, Teams…) need an opaque panel */
+  .global-nav-container li.has-sub > div, .global-nav-container [class*="submenu"] {
+    background-color: var(--surface) !important; border: 1px solid var(--line) !important;
+    border-radius: 10px !important; box-shadow: 0 8px 24px rgb(0 0 0 / .35) !important;
+  }
+  /* active-tab underline: accent, not ESPN red */
+  .global-nav-container a::before { background-color: var(--accent) !important; }
+  /* caret under the active sport in the top nav drew as a gray block */
+  #global-nav li.sports::before, li.sports.active::before { display: none !important; }
+  /* Gamecast / Box Score hover overlay on scoreboard tiles */
+  .cscore_header-links { background-color: var(--surface) !important; }
+}

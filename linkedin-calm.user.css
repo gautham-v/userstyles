@@ -1,0 +1,232 @@
+/* ==UserStyle==
+@name           LinkedIn — Calm
+@namespace      gautham/userstyles
+@version        1.3.0
+@description    Muted, low-noise linkedin.com. Warm dark + paper light palettes, icon-only nav, no Premium/News/puzzles/ads rail.
+@preprocessor   default
+@var color bg      "Background"  #181816
+@var color surface "Surface"     #20201e
+@var color line    "Borders"     #2c2c29
+@var color text    "Text"        #d6d3cc
+@var color dim     "Dim text"    #8b8881
+@var color accent  "Accent"      #e9e3d8
+@var color lbg      "Light · Background"  #f6f4ef
+@var color lsurface "Light · Surface"     #eeebe4
+@var color lline    "Light · Borders"     #e2ded5
+@var color ltext    "Light · Text"        #2b2a26
+@var color ldim     "Light · Dim text"    #77736b
+@var color laccent  "Light · Accent"      #1d1b17
+@var checkbox navHide   "Top nav: fade until hovered"  1
+==/UserStyle== */
+
+/* LinkedIn's 2026 UI ("aero") ships hashed design tokens whose values are
+   light-dark(light, dark) pairs, resolved against the site's own
+   color-scheme (<body data-color-scheme>). We remap the semantic tokens to
+   light-dark() pairs of our palette, so forcing color-scheme from the OS
+   (first rule below) flips the whole palette. Token names were mapped from their values on
+   2026-09-22; if a LinkedIn deploy renames them, the palette quietly falls
+   back to LinkedIn's defaults while the hiding rules keep working. */
+
+@-moz-document domain("linkedin.com") {
+  /* follow macOS dark/light regardless of LinkedIn's own setting;
+     light-dark() below resolves against this */
+  @media (prefers-color-scheme: dark) {
+    :root, body, [data-color-scheme] { color-scheme: dark !important; }
+  }
+  @media (prefers-color-scheme: light) {
+    :root, body, [data-color-scheme] { color-scheme: light !important; }
+  }
+  :root {
+    /* canvas sits a step darker than cards in light mode, like LinkedIn's own */
+    --c-bg:      light-dark(var(--lsurface), var(--bg));
+    --c-surface: light-dark(var(--lbg), var(--surface));
+    --c-line:    light-dark(var(--lline), var(--line));
+    --c-hover:   light-dark(color-mix(in srgb, var(--lline) 60%, transparent), color-mix(in srgb, var(--line) 60%, transparent));
+    --c-text:    light-dark(var(--ltext), var(--text));
+    --c-dim:     light-dark(var(--ldim), var(--dim));
+    --c-accent:  light-dark(var(--laccent), var(--accent));
+    --c-wash:    color-mix(in srgb, var(--c-accent) 10%, transparent);
+  }
+
+  /* ---------- legacy UI (messaging page, messaging overlay, older pages) ----------
+     The Ember-era pages still use LinkedIn's readable --color-* tokens. */
+  :root, .theme, [class*="theme--"], .msg-overlay-container, .msg-overlay-list-bubble, .msg-overlay-conversation-bubble {
+    /* bg */
+     --color-background-canvas: var(--c-bg) !important;
+    /* surface */
+     --color-background-offset: var(--c-surface) !important;
+     --color-background-caution-soft: var(--c-surface) !important;
+     --color-background-negative-soft: var(--c-surface) !important;
+     --color-background-container-tint: var(--c-surface) !important;
+     --color-background-canvas-tint: var(--c-surface) !important;
+     --color-background: var(--c-surface) !important;
+     --color-background-neutral-soft: var(--c-surface) !important;
+     --color-background-container: var(--c-surface) !important;
+    /* hover */
+     --color-background-none-tint-active: var(--c-hover) !important;
+     --color-background-none-active: var(--c-hover) !important;
+     --color-background-none-tint-hover: var(--c-hover) !important;
+     --color-background-none-hover: var(--c-hover) !important;
+    /* text */
+     --color-nav-icon-active: var(--c-text) !important; --color-element-active: var(--c-text) !important;
+     --color-nav-icon-hover: var(--c-text) !important; --color-label-hover: var(--c-text) !important;
+     --color-icon-stick-active: var(--c-text) !important;
+     --color-element-low-emphasis-shift-active: var(--c-text) !important;
+     --color-text-meta-hover: var(--c-text) !important; --color-label-active: var(--c-text) !important;
+     --color-element-low-emphasis-stick-active: var(--c-text) !important;
+     --color-text-hover: var(--c-text) !important; --color-icon-nav-selected-active: var(--c-text) !important;
+     --color-text-low-emphasis-shift-active: var(--c-text) !important;
+     --color-icon-active: var(--c-text) !important;
+     --color-element-low-emphasis-active: var(--c-text) !important;
+     --color-icon-hover: var(--c-text) !important; --color-text-stick-active: var(--c-text) !important;
+     --color-label: var(--c-text) !important; --color-nav-label-hover: var(--c-text) !important;
+     --color-element: var(--c-text) !important; --color-text-meta-active: var(--c-text) !important;
+     --color-icon-nav-selected: var(--c-text) !important; --color-icon-nav-active: var(--c-text) !important;
+     --color-text-active: var(--c-text) !important; --color-icon: var(--c-text) !important;
+     --color-nav-label-active: var(--c-text) !important; --color-text-stick: var(--c-text) !important;
+     --color-text-low-emphasis-stick-active: var(--c-text) !important;
+     --color-text-low-emphasis-active: var(--c-text) !important; --color-text: var(--c-text) !important;
+    /* dim */
+     --color-text-low-emphasis-shift: var(--c-dim) !important; --color-label-disabled: var(--c-dim) !important;
+     --color-text-low-emphasis: var(--c-dim) !important;
+     --color-text-low-emphasis-stick: var(--c-dim) !important; --color-text-disabled: var(--c-dim) !important;
+     --color-nav-icon: var(--c-dim) !important; --color-text-meta: var(--c-dim) !important;
+     --color-icon-disabled: var(--c-dim) !important; --color-nav-label: var(--c-dim) !important;
+     --color-icon-nav: var(--c-dim) !important; --color-icon-stick: var(--c-dim) !important;
+     --color-element-low-emphasis: var(--c-dim) !important;
+     --color-element-low-emphasis-shift: var(--c-dim) !important;
+     --color-element-low-emphasis-stick: var(--c-dim) !important;
+    /* line */
+     --color-border-faint-active: var(--c-line) !important; --color-border-faint: var(--c-line) !important;
+     --color-border-disabled: var(--c-line) !important; --color-border-subtle-hover: var(--c-line) !important;
+     --color-border-subtle: var(--c-line) !important; --color-border-subtle-active: var(--c-line) !important;
+     --color-border: var(--c-line) !important; --color-border-low-emphasis: var(--c-line) !important;
+     --color-border-low-emphasis-active: var(--c-line) !important;
+     --color-border-hover: var(--c-line) !important; --color-border-faint-hover: var(--c-line) !important;
+     --color-border-active: var(--c-line) !important;
+    /* accent */
+     --color-new: var(--c-accent) !important; --color-action: var(--c-accent) !important;
+     --color-action-hover: var(--c-accent) !important; --color-action-active: var(--c-accent) !important;
+     --color-checked-offset-active: var(--c-accent) !important; --color-brand: var(--c-accent) !important;
+     --color-positive: var(--c-accent) !important; --color-checked: var(--c-accent) !important;
+     --color-loading: var(--c-accent) !important; --color-signal-positive: var(--c-accent) !important;
+     --color-link: var(--c-accent) !important; --color-link-hover: var(--c-accent) !important;
+     --color-link-active: var(--c-accent) !important; --color-link-visited: var(--c-accent) !important;
+     --color-link-visited-hover: var(--c-accent) !important;
+     --color-link-visited-active: var(--c-accent) !important; --color-border-focus: var(--c-accent) !important;
+    /* wash */
+     --color-background-new: var(--c-wash) !important; --color-background-new-hover: var(--c-wash) !important;
+     --color-background-new-active: var(--c-wash) !important;
+     --color-background-action-tint: var(--c-wash) !important;
+  }
+
+  /* ---------- palette ---------- */
+  :root, [data-color-scheme] {
+    /* bg */
+    --_7407b617: var(--c-bg) !important; --_2b293512: var(--c-bg) !important;
+    /* surface */
+    --_4e4c7045: var(--c-surface) !important; --_06b6d348: var(--c-surface) !important; --_1a95d855: var(--c-surface) !important;
+    --ab8dad03: var(--c-surface) !important; --c5c1bae6: var(--c-surface) !important; --_0981eaa4: var(--c-surface) !important;
+    --_9b5f6e54: var(--c-surface) !important; --ee0a70a9: var(--c-surface) !important; --_9e742796: var(--c-surface) !important;
+    --_6331cd0b: var(--c-surface) !important; --_9082d38a: var(--c-surface) !important; --a1d431d0: var(--c-surface) !important;
+    --_1032b619: var(--c-surface) !important;
+    /* text */
+    --cbd6984c: var(--c-text) !important; --_98752464: var(--c-text) !important; --aaf1216c: var(--c-text) !important;
+    --_5fb61b1e: var(--c-text) !important; --d57143b2: var(--c-text) !important; --_89204ab0: var(--c-text) !important;
+    --b42da29e: var(--c-text) !important; --b5834489: var(--c-text) !important; --b0bfff5c: var(--c-text) !important;
+    --c83af5ee: var(--c-text) !important; --aed5e164: var(--c-text) !important; --_6af92021: var(--c-text) !important;
+    --e10c94d3: var(--c-text) !important; --_33ef3925: var(--c-text) !important; --b4037215: var(--c-text) !important;
+    --_7b84fa76: var(--c-text) !important; --_45000741: var(--c-text) !important; --bd2ab71c: var(--c-text) !important;
+    --bc055447: var(--c-text) !important; --b16c3c56: var(--c-text) !important; --_6e62e0b6: var(--c-text) !important;
+    --_45fea240: var(--c-text) !important; --_4ae34589: var(--c-text) !important; --_552a7f79: var(--c-text) !important;
+    --_4aa5c28e: var(--c-text) !important; --_9cae2ee3: var(--c-text) !important; --fd053096: var(--c-text) !important;
+    --ebddf863: var(--c-text) !important; --_73651a51: var(--c-text) !important; --_6b328529: var(--c-text) !important;
+    --_49bf59bf: var(--c-text) !important; --_93dfc2f3: var(--c-text) !important; --_8d2c6555: var(--c-text) !important;
+    --_841bcdd4: var(--c-text) !important; --_940bb046: var(--c-text) !important;
+    /* dim */
+    --_4941282b: var(--c-dim) !important; --cfd68fa3: var(--c-dim) !important; --_699f36b2: var(--c-dim) !important;
+    --_5d55caae: var(--c-dim) !important; --_52b70a23: var(--c-dim) !important; --_0f59730f: var(--c-dim) !important;
+    --_079ec82b: var(--c-dim) !important; --_7869e876: var(--c-dim) !important; --f9768647: var(--c-dim) !important;
+    /* line */
+    --_24875615: var(--c-line) !important; --baf77fa0: var(--c-line) !important; --_74cc2395: var(--c-line) !important;
+    --acda3529: var(--c-line) !important; --_1343886e: var(--c-line) !important; --_8b1c0920: var(--c-line) !important;
+    /* hover */
+    --_118d89af: var(--c-hover) !important; --_4d5a5829: var(--c-hover) !important;
+    /* accent */
+    --aa130347: var(--c-accent) !important; --e28313bb: var(--c-accent) !important; --b4959146: var(--c-accent) !important;
+    --b8a63fb1: var(--c-accent) !important; --_03c745d4: var(--c-accent) !important; --_75e33b44: var(--c-accent) !important;
+    --b9290775: var(--c-accent) !important; --_465dd87b: var(--c-accent) !important; --_5ef13a23: var(--c-accent) !important;
+    --_07c3d8c2: var(--c-accent) !important;
+  }
+  /* green "selected" pills/tabs and blue links, which some components
+     re-declare locally: fold them into the monochrome accent */
+  :root, [data-color-scheme], a[class], button[class], label[class] {
+    --aa88f70b: var(--c-accent) !important; --_38af0316: var(--c-accent) !important; --_74b529d8: var(--c-accent)
+    !important; --e539c760: var(--c-accent) !important; --_63274a02: var(--c-accent) !important; --_15537d07:
+    var(--c-accent) !important; --_8987faec: var(--c-accent) !important; --_1803ced1: var(--c-accent) !important;
+    --_41011a1e: var(--c-accent) !important; --_0fd037a9: var(--c-accent) !important; --b84eddcc: var(--c-accent)
+    !important; --ed4f9da5: var(--c-accent) !important; --d688bd16: var(--c-accent) !important; --c8253b19:
+    var(--c-accent) !important; --febf4240: var(--c-accent) !important; --c94d7136: var(--c-wash) !important;
+    --b3b91407: var(--c-wash) !important; --_5948833a: var(--c-wash) !important; --cca6b73f: var(--c-wash)
+    !important;
+  }
+  /* link components re-declare some tokens locally (subtle gray links,
+     green "selected" tabs), so remap those on the elements themselves */
+  a[class], button[class] {
+    --e10c94d3: var(--c-dim) !important; --_6af92021: var(--c-dim) !important; --_940bb046: var(--c-dim) !important;
+    --c83af5ee: var(--c-accent) !important; --b0bfff5c: var(--c-accent) !important; --_4ae34589: var(--c-accent) !important;
+    --_45fea240: var(--c-accent) !important; --_6e62e0b6: var(--c-accent) !important; --aed5e164: var(--c-accent) !important;
+  }
+  html, body { background-color: var(--c-bg) !important; }
+
+  /* ---------- reading ---------- */
+  img { filter: saturate(0.9); }
+
+  /* ---------- noise removal ---------- */
+  /* right rail: LinkedIn News, puzzles, "Add to your feed", rail ads */
+  aside[aria-label="Aside"] { display: none !important; }
+  /* Premium upsells */
+  a[href*="/premium/"], a[href*="linkedin.com/premium"] { display: none !important; }
+  /* top nav: drop "For Business" and "Advertise" */
+  header nav li:has(> button[aria-label="For Business"]),
+  header nav li:has(> a[href*="/campaignmanager/"]) { display: none !important; }
+
+  /* legacy: text on filled buttons/pills, and spots that hard-code colors */
+  :root, .theme, [class*="theme--"] {
+    --color-label-knockout: var(--c-bg) !important; --color-label-knockout-hover: var(--c-bg) !important;
+    --color-label-knockout-active: var(--c-bg) !important; --color-icon-knockout: var(--c-bg) !important;
+    --color-icon-knockout-hover: var(--c-bg) !important; --color-icon-knockout-active: var(--c-bg) !important;
+  }
+  :root, .theme, [class*="theme--"] {
+    --voyager-color-background-input-search: var(--c-bg) !important;
+    --voyager-color-background-input-search-active: var(--c-bg) !important;
+    --voyager-color-background-comment: var(--c-surface) !important; --voyager-color-background-comment-v2: var(--c-surface) !important;
+    --voyager-color-background-comment-v3: var(--c-surface) !important; --voyager-color-background-contribution-card: var(--c-surface) !important;
+    --voyager-color-background-coachmark: var(--c-surface) !important; --voyager-color-background-container-tint-2: var(--c-surface) !important;
+    --voyager-color-action: var(--c-accent) !important; --voyager-color-action-stick: var(--c-accent) !important;
+    --voyager-color-element-loading: var(--c-dim) !important;
+    --color-background-accent-soft-4: var(--c-surface) !important;
+    --color-coach-prompt-contextual-background: var(--c-bg) !important;
+    --color-table-background-offset: var(--c-surface) !important;
+  }
+  .msg-conversations-container__conversations-list, .msg-conversation-listitem__link { background-color: var(--c-surface) !important; }
+  .msg-conversation-listitem__link:hover, .msg-conversations-container__convo-item-link--active { background-color: var(--c-hover) !important; }
+  .msg-cross-pillar-search-form__search-field, .msg-form__msg-content-container--scrollable,
+  .msg-form__contenteditable { background-color: var(--c-bg) !important; color: var(--c-text) !important; }
+  .msg-s-event-listitem__download-attachment-icon { background-color: var(--c-surface) !important; }
+
+  /* legacy top nav: same treatment */
+  .global-nav__primary-link-text, .global-nav__primary-item--divider,
+  .global-nav__primary-item:has(> button[aria-label*="For Business"]),
+  .global-nav__primary-item:has(a[href*="/campaignmanager/"]) { display: none !important; }
+  footer.global-footer-compact, .msg__footer-compact { display: none !important; }
+
+  /* ---------- top nav: icon-only, faded until hovered ---------- */
+  header nav li > a > span:last-child,
+  header nav li > button > span:last-child { display: none !important; }
+  header nav {
+    opacity: calc(1 - var(--navHide) * 0.6);
+    transition: opacity 0.2s ease;
+  }
+  header nav:hover, header nav:focus-within { opacity: 1; }
+}

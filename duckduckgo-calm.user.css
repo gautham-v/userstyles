@@ -1,0 +1,142 @@
+/* ==UserStyle==
+@name           DuckDuckGo — Calm
+@namespace      gautham/userstyles
+@version        1.2.0
+@description    Muted, low-noise duckduckgo.com. Warm dark + paper light palettes, no ads, no Duck.ai/Search Assist, no promos.
+@preprocessor   default
+@var color calm_bg      "Background"  #181816
+@var color calm_surface "Surface"     #20201e
+@var color calm_line    "Borders"     #2c2c29
+@var color calm_text    "Text"        #d6d3cc
+@var color calm_dim     "Dim text"    #8b8881
+@var color calm_accent  "Accent"      #e9e3d8
+@var color calm_lbg      "Light · Background"  #f6f4ef
+@var color calm_lsurface "Light · Surface"     #eeebe4
+@var color calm_lline    "Light · Borders"     #e2ded5
+@var color calm_ltext    "Light · Text"        #2b2a26
+@var color calm_ldim     "Light · Dim text"    #77736b
+@var color calm_laccent  "Light · Accent"      #1d1b17
+==/UserStyle== */
+
+/* Follows DDG's own theme (Settings → Appearance, or the OS when set to
+   system). Results pages mark dark with html.dark-bg and theme through
+   --theme-col-* variables; the homepage marks html.theme-dark/.theme-light
+   and themes through short minified variables (--bx, --cc, ...), which can
+   change when DDG ships a new build. Other DDG themes (terminal, etc.) are
+   not handled. Variables are prefixed calm_ because DDG already defines
+   its own --bg on <html>. */
+
+@-moz-document domain("duckduckgo.com") {
+  /* anything not marked dark gets the light palette */
+  html:not(.dark-bg):not(.theme-dark) {
+    --calm_bg: var(--calm_lbg); --calm_surface: var(--calm_lsurface); --calm_line: var(--calm_lline);
+    --calm_text: var(--calm_ltext); --calm_dim: var(--calm_ldim); --calm_accent: var(--calm_laccent);
+  }
+
+  /* ---------- palette: results pages (--theme-col-*) ---------- */
+  html {
+    --theme-col-bg-page: var(--calm_bg) !important;
+    --theme-col-bg-page-transparent: color-mix(in srgb, var(--calm_bg) 0%, transparent) !important;
+    --theme-col-bg-header: var(--calm_bg) !important;
+    --theme-col-bg-header-transparent: color-mix(in srgb, var(--calm_bg) 0%, transparent) !important;
+    --theme-col-header-divider: var(--calm_line) !important;
+    --theme-col-metabar-bg: var(--calm_bg) !important;
+    --theme-col-metabar-transparent: color-mix(in srgb, var(--calm_bg) 0%, transparent) !important;
+    --theme-col-bg-search: var(--calm_surface) !important;
+    --theme-col-txt-search-input: var(--calm_text) !important;
+    --theme-col-txt-search-button: var(--calm_dim) !important;
+    --theme-col-bg-ui: var(--calm_surface) !important;
+    --theme-col-bg-ui-active: var(--calm_line) !important;
+    --theme-col-bg-card: var(--calm_surface) !important;
+    --theme-col-bg-card-header: var(--calm_surface) !important;
+    --theme-col-bg-page-alt-1: var(--calm_surface) !important;
+    --theme-col-bg-page-alt-2: var(--calm_surface) !important;
+    --theme-col-bg-page-alt-3: var(--calm_bg) !important;
+    --theme-col-bg-result-item-divider: var(--calm_bg) !important;
+    --theme-col-border-ui: var(--calm_line) !important;
+    --theme-col-separator: var(--calm_line) !important;
+    --theme-col-separator-active: var(--calm_dim) !important;
+    --theme-col-card-inner-border: var(--calm_line) !important;
+    --theme-col-border-card-nested: var(--calm_line) !important;
+    --theme-col-txt-header-link: var(--calm_dim) !important;
+    --theme-col-txt-header-link-hover: var(--calm_text) !important;
+    --theme-col-txt-title: var(--calm_accent) !important;
+    --theme-col-txt-title-visited: color-mix(in srgb, var(--calm_accent) 65%, var(--calm_dim)) !important;
+    --theme-col-txt-snippet: var(--calm_text) !important;
+    --theme-col-txt-url: var(--calm_dim) !important;
+    --theme-col-txt-url-domain: var(--calm_dim) !important;
+    --theme-col-txt-url-path: var(--calm_dim) !important;
+    --theme-col-txt-card: var(--calm_text) !important;
+    --theme-col-txt-card-title: var(--calm_text) !important;
+    --theme-col-txt-card-subtitle: var(--calm_dim) !important;
+    --theme-col-txt-card-body: var(--calm_text) !important;
+    --theme-col-txt-card-body-light: var(--calm_dim) !important;
+    --theme-col-txt-card-aside: var(--calm_dim) !important;
+    --theme-col-txt-tertiary: var(--calm_dim) !important;
+    --theme-col-txt-msg: var(--calm_dim) !important;
+    --theme-col-bg-txt-1: var(--calm_text) !important;
+    --theme-col-bg-txt-2: var(--calm_text) !important;
+    --theme-col-bg-txt-3: var(--calm_dim) !important;
+    --theme-col-bg-button-primary: var(--calm_accent) !important;
+    --theme-col-txt-button-primary: var(--calm_bg) !important;
+  }
+
+  /* ---------- palette: homepage (minified tokens) ---------- */
+  html.theme-dark, html.theme-light,
+  .theme-dark, .theme-light {
+    --bx: var(--calm_bg) !important;        /* page */
+    --by: var(--calm_bg) !important;
+    --bz: var(--calm_surface) !important;
+    --ca: var(--calm_surface) !important;   /* search field */
+    --cb: var(--calm_surface) !important;
+    --cc: var(--calm_text) !important;
+    --cm: var(--calm_text) !important;      /* primary text */
+    --cp: var(--calm_text) !important;
+    --cn: var(--calm_dim) !important;       /* secondary text */
+    --cq: var(--calm_dim) !important;
+    --cs: var(--calm_accent) !important;    /* links */
+    --cy: var(--calm_accent) !important;
+  }
+
+  html, body { background-color: var(--calm_bg) !important; }
+
+  /* ---------- reading ---------- */
+  [data-testid="result-title-a"] { font-size: 19px !important; font-weight: 500 !important; }
+  [data-result="snippet"] { line-height: 1.6 !important; color: var(--calm_text) !important; }
+  [data-result="snippet"] b { font-weight: 600 !important; color: var(--calm_text) !important; }
+  [data-testid="result-extras-url-link"] * { color: var(--calm_dim) !important; }
+  /* quieter favicons and date stamps */
+  [data-testid="result"] img { filter: saturate(0.6); opacity: 0.8; }
+
+  /* ---------- noise removal ---------- */
+  /* ads and shopping ad carousels */
+  li:has(> article[data-testid="ad"]),
+  article[data-testid="ad"],
+  li:has([data-testid^="ad-badge-ad-tooltip-products"]) { display: none !important; }
+
+  /* Duck.ai / Search Assist */
+  [data-testid="aichat-button"],
+  [data-testid="ai-toggle"],
+  [data-testid="ask"],
+  [data-testid="header"] a[href*="ia=chat"],
+  [data-testid="header"] a[data-assist-icon-trigger],
+  [data-testid="header"] a[href*="assist="],
+  li:has([data-testid^="duckassist"]) { display: none !important; }
+
+  /* homepage promos: tagline, browser download, AI settings, below-the-fold */
+  [class*="minimal-hero-module"][class*="__taglineWrap"],
+  [data-testid="home-minimal-desktop-cta"],
+  [data-testid="home-minimal-customizer"],
+  [data-testid="pull-tab-scroll-button"],
+  [data-testid="below-the-fold"] { display: none !important; }
+
+  /* header clutter: "Protection. Privacy. Peace of mind." link, green "Private"
+     chip, feedback prompts */
+  [data-testid="header"] a[href^="/compare-privacy"],
+  [data-testid="privacy-reminder"],
+  [data-testid="feedback-prompt"],
+  [data-testid="floating-feedback-prompt"] { display: none !important; }
+
+  /* ---------- motion ---------- */
+  *, *::before, *::after { transition-duration: 0s !important; }
+}

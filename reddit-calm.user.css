@@ -1,0 +1,111 @@
+/* ==UserStyle==
+@name           Reddit — Calm
+@namespace      gautham/userstyles
+@version        0.3.0
+@description    Muted, low-noise www.reddit.com (new UI). Warm dark + paper light palettes, no ads/trending/upsells/awards.
+@preprocessor   default
+@var color bg      "Background"  #181816
+@var color surface "Surface"     #20201e
+@var color line    "Borders"     #2c2c29
+@var color text    "Text"        #d6d3cc
+@var color dim     "Dim text"    #8b8881
+@var color accent  "Accent"      #e9e3d8
+@var color lbg      "Light · Background"  #f6f4ef
+@var color lsurface "Light · Surface"     #eeebe4
+@var color lline    "Light · Borders"     #e2ded5
+@var color ltext    "Light · Text"        #2b2a26
+@var color ldim     "Light · Dim text"    #77736b
+@var color laccent  "Light · Accent"      #1d1b17
+@var checkbox navHide   "Left nav: hide until hovered"  1
+==/UserStyle== */
+
+/* UNVERIFIED DRAFT: written without seeing the live page (Claude in Chrome
+   blocks reddit.com). Selectors come from Reddit's known shreddit markup.
+   Reddit themes through --color-* custom properties, which inherit into
+   the web components' shadow roots, so the palette is set by re-pointing
+   those tokens. The theme class (theme-dark / theme-light) on <html> picks
+   the palette; with no class, macOS light/dark decides. */
+
+@-moz-document domain("www.reddit.com"), domain("sh.reddit.com") {
+  /* ---------- palette selection ---------- */
+  :root, html.theme-dark, html.theme-dark body, html.theme-dark shreddit-app {
+    --c-bg: var(--bg); --c-surface: var(--surface); --c-line: var(--line);
+    --c-text: var(--text); --c-dim: var(--dim); --c-accent: var(--accent);
+  }
+  html.theme-light, html.theme-light body, html.theme-light shreddit-app {
+    --c-bg: var(--lbg); --c-surface: var(--lsurface); --c-line: var(--lline);
+    --c-text: var(--ltext); --c-dim: var(--ldim); --c-accent: var(--laccent);
+  }
+  @media (prefers-color-scheme: light) {
+    html:not(.theme-dark), html:not(.theme-dark) body {
+      --c-bg: var(--lbg); --c-surface: var(--lsurface); --c-line: var(--lline);
+      --c-text: var(--ltext); --c-dim: var(--ldim); --c-accent: var(--laccent);
+    }
+  }
+
+  /* ---------- Reddit tokens → palette ---------- */
+  :root, html[class*="theme-"], body, shreddit-app {
+    --color-neutral-background: var(--c-bg) !important;
+    --color-neutral-background-weak: var(--c-surface) !important;
+    --color-neutral-background-hover: var(--c-surface) !important;
+    --color-neutral-background-selected: var(--c-surface) !important;
+    --color-neutral-background-strong: var(--c-surface) !important;
+    --color-neutral-background-container: var(--c-bg) !important;
+    --color-neutral-background-container-strong: var(--c-surface) !important;
+    --color-neutral-content: var(--c-text) !important;
+    --color-neutral-content-strong: var(--c-text) !important;
+    --color-neutral-content-weak: var(--c-dim) !important;
+    --color-neutral-border: var(--c-line) !important;
+    --color-neutral-border-weak: var(--c-line) !important;
+    --color-secondary-background: var(--c-surface) !important;
+    --color-secondary-background-hover: var(--c-line) !important;
+    --color-secondary-plain: var(--c-text) !important;
+    --color-secondary-weak: var(--c-dim) !important;
+    --color-primary: var(--c-accent) !important;
+    --color-primary-background: var(--c-accent) !important;
+    --color-primary-plain: var(--c-accent) !important;
+    --color-link: var(--c-accent) !important;
+    --color-interactive-content: var(--c-accent) !important;
+    --color-global-brand-orangered: var(--c-accent) !important;
+  }
+
+  html, body, shreddit-app { background-color: var(--c-bg) !important; color: var(--c-text); }
+
+  /* ---------- reading ---------- */
+  shreddit-post [slot="text-body"], .md { line-height: 1.6 !important; }
+  shreddit-post img, shreddit-player { filter: saturate(0.85); }
+
+  /* ---------- noise removal ---------- */
+  /* ads */
+  shreddit-ad-post, shreddit-sidebar-ad, shreddit-comments-page-ad,
+  [data-testid="ad-post"], [promoted] { display: none !important; }
+  /* awards */
+  award-button, shreddit-post [slot="awards"] { display: none !important; }
+  /* Get app / Premium / Advertise upsells */
+  [noun="get_app"], [noun="premium"], [noun="advertise"],
+  a[href*="/premium"], a[href^="https://ads.reddit.com"] { display: none !important; }
+  /* trending searches in the search dropdown */
+  #reddit-trending-searches-partial-container, [id*="trending-searches"],
+  faceplate-tracker[source="search"][noun="trending"] { display: none !important; }
+  /* right rail: popular communities, recent posts */
+  #popular-communities-list, recent-posts, [id="recent-posts"] { display: none !important; }
+
+  /* ---------- left nav: Home + your communities ---------- */
+  #left-sidebar a[href="/r/popular/"],
+  #left-sidebar a[href="/r/all/"],
+  #left-sidebar a[href="/explore/"],
+  #left-sidebar a[href^="/answers"],
+  #left-sidebar faceplate-expandable-section-helper:has([aria-controls="RESOURCES"]),
+  #left-sidebar faceplate-expandable-section-helper:has([aria-controls="RECENT"]) { display: none !important; }
+
+  /* fade away until hovered (toggle "navHide" in the style's settings) */
+  #left-sidebar-container {
+    opacity: calc(1 - var(--navHide) * 0.92);
+    transition: opacity 0.2s ease !important;
+  }
+  #left-sidebar-container:hover,
+  #left-sidebar-container:focus-within { opacity: 1; }
+
+  /* ---------- motion ---------- */
+  *, *::before, *::after { transition-duration: 0s !important; }
+}

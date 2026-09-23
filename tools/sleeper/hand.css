@@ -1,0 +1,53 @@
+
+  /* ---------- newer pages (Scores home, etc.): Tailwind color tokens ---------- */
+  :root {
+    --color-background: var(--c-bg) !important;
+    --color-background-dark: var(--c-bg) !important;
+    --color-neutral-1000: var(--c-bg) !important;
+    --color-neutral-900: var(--c-bg) !important;
+    --color-neutral-800: var(--c-surface) !important;
+    --color-neutral-700: var(--c-surface) !important;
+    --color-background-card-dark: var(--c-surface) !important;
+    --color-accent: var(--c-surface) !important;
+    --color-secondary: var(--c-surface) !important;
+    --color-popover: var(--c-surface) !important;
+    --color-sidebar: var(--c-surface) !important;
+    --color-neutral-600: var(--c-raised) !important;
+    --color-neutral-500: var(--c-line) !important;
+    --color-neutral-400: var(--c-line) !important;
+    --color-neutral-300: var(--c-dim) !important;
+    --color-neutral-200: var(--c-text) !important;
+    --color-neutral-100: var(--c-text) !important;
+    --color-card-foreground: var(--c-text) !important;
+    --color-foreground: var(--c-text) !important;
+    --color-popover-foreground: var(--c-text) !important;
+    --color-accent-foreground: var(--c-text) !important;
+    --color-bright: var(--c-text) !important;
+    --color-border: color-mix(in srgb, var(--c-text) 10%, transparent) !important;
+    --color-input: color-mix(in srgb, var(--c-text) 15%, transparent) !important;
+    --color-sidebar-border: color-mix(in srgb, var(--c-text) 10%, transparent) !important;
+    --color-info: var(--c-accent) !important;
+    --color-text-decoration: var(--c-accent) !important;
+    --color-ring: var(--c-accent) !important;
+    --color-pink: color-mix(in oklab, #ff4bfe 45%, var(--c-text)) !important;
+    --color-salmon: color-mix(in oklab, #ff6482 50%, var(--c-text)) !important;
+  }
+
+  /* ---------- fixes ---------- */
+  /* modal backdrop: dim the page instead of washing it out */
+  .modal-item-underlay { background-color: color-mix(in srgb, #000 55%, transparent) !important; }
+
+  /* ---------- noise removal ---------- */
+  /* Sleeper Picks (betting) and its regulatory page, Pick'em, app downloads */
+  a[href^="/picks"], a[href*="sleeper.com/picks"], a[href*="pickem"],
+  a[href*="go.slpr.link"], a[href*="apps.apple.com"], a[href*="play.google.com"],
+  li:has(> a[href^="/picks"]), li:has(> a[href*="pickem"]) { display: none !important; }
+
+  /* ---------- left sidebar (leagues, DMs, channels): fade until hovered ---------- */
+  .large-left-panel {
+    opacity: calc(1 - var(--navHide) * 0.6);
+    transition: opacity 0.2s ease;
+  }
+  .large-left-panel:hover, .large-left-panel:focus-within { opacity: 1; }
+
+  /* ---------- inline colors (position labels, win/loss numbers) ---------- */

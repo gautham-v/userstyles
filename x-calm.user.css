@@ -1,0 +1,133 @@
+/* ==UserStyle==
+@name           X — Calm
+@namespace      gautham/userstyles
+@version        1.4.0
+@description    Muted, low-noise x.com. Warm dark + paper light palettes, no metrics, no Grok/Premium/trends.
+@preprocessor   default
+@var color bg      "Background"  #181816
+@var color surface "Surface"     #20201e
+@var color line    "Borders"     #2c2c29
+@var color text    "Text"        #d6d3cc
+@var color dim     "Dim text"    #8b8881
+@var color accent  "Accent"      #e9e3d8
+@var color lbg      "Light · Background"  #f6f4ef
+@var color lsurface "Light · Surface"     #eeebe4
+@var color lline    "Light · Borders"     #e2ded5
+@var color ltext    "Light · Text"        #2b2a26
+@var color ldim     "Light · Dim text"    #77736b
+@var color laccent  "Light · Accent"      #1d1b17
+@var checkbox navHide   "Left nav: hide until hovered"  1
+==/UserStyle== */
+
+/* Follows X's own Display setting: "Lights out" gets the dark palette,
+   "Default" gets the light one ("Dim" is not themed). The r-* classes are
+   X's atomic classes, hashed from their values, so they stay stable
+   until X changes its palette. With X set to "Use system setting", the
+   palette follows macOS light/dark. */
+
+@-moz-document domain("x.com"), domain("twitter.com") {
+  /* X writes color-scheme onto <html>; swap the palette when it's light */
+  html[style*="color-scheme: light"] {
+    --bg: var(--lbg); --surface: var(--lsurface); --line: var(--lline);
+    --text: var(--ltext); --dim: var(--ldim); --accent: var(--laccent);
+  }
+
+  /* ---------- palette ---------- */
+  html, body { background-color: var(--bg) !important; }
+
+  /* dark ("Lights out") classes */
+  .r-kemksi { background-color: var(--bg) !important; }
+  .r-5zmot { background-color: color-mix(in srgb, var(--bg) 80%, transparent) !important; }
+  .r-gu4em3 { background-color: var(--line) !important; }
+  .r-1kqtdi0, .r-1igl3o0, .r-1roi411, .r-j7xza8 { border-color: var(--line) !important; }
+  .r-1nao33i { color: var(--text) !important; }
+  html[style*="color-scheme: dark"] .r-jwli3a { color: var(--text) !important; }
+  .r-1bwzh9t, .r-1q89gc9 { color: var(--dim) !important; }
+
+  /* light ("Default") classes */
+  .r-14lw9ot { background-color: var(--bg) !important; }
+  .r-6026j { background-color: color-mix(in srgb, var(--bg) 85%, transparent) !important; }
+  .r-1sw30gj { background-color: var(--surface) !important; }
+  .r-1ets6dv, .r-jxzhtn, .r-j5o65s { border-color: var(--line) !important; }
+  .r-18jsvk2 { color: var(--text) !important; }
+  .r-14j79pv { color: var(--dim) !important; }
+  .r-1m3jxhj { background-color: var(--text) !important; }
+
+  /* both */
+  .r-1cvl2hr { color: var(--accent) !important; }           /* links, mentions */
+  .r-l5o3uw,                                                 /* blue buttons */
+  [style*="background-color: rgb(29, 155, 240)"] {          /* active tab underline (inline) */
+    background-color: var(--accent) !important;
+  }
+  /* the accent is near-white in dark mode, so text on it goes dark */
+  .r-l5o3uw, .r-l5o3uw * { color: var(--bg) !important; }
+
+  /* hover states: quieter */
+  [data-testid="cellInnerDiv"] article:hover { background-color: var(--surface) !important; }
+
+  /* primary buttons (Post, Follow): off-white → soft */
+  [data-testid="tweetButtonInline"], [data-testid$="-follow"] {
+    background-color: var(--text) !important;
+    border-color: var(--text) !important;
+  }
+
+  [data-testid="tweet-text-show-more-link"], [data-testid="tweet-text-show-more-link"] * { color: var(--accent) !important; }
+
+  /* ---------- reading ---------- */
+  [data-testid="tweetText"] {
+    font-size: 15.5px !important;
+    line-height: 1.55 !important;
+    color: var(--text) !important;
+  }
+  [data-testid="tweet"] img, [data-testid="tweetPhoto"] { filter: saturate(0.85); }
+
+  /* ---------- noise removal ---------- */
+  /* Grok */
+  a[href="/i/grok"], [data-testid="GrokDrawer"], [data-testid="grokImgGen"],
+  button[aria-label="Grok actions"] { display: none !important; }
+  /* Premium / upsells / jobs / orgs */
+  [data-testid="premium-hub-tab"], a[href="/i/premium_sign_up"],
+  a[href*="/i/verified-orgs"], a[href="/jobs"], a[href*="/i/jf/"] { display: none !important; }
+  /* ---------- left nav: Home, Search, Notifications, Messages, Profile, More ---------- */
+  header[role="banner"] a[href="/i/connect_people"],
+  header[role="banner"] a[href="/i/money"],
+  header[role="banner"] a[href="/i/history"],
+  header[role="banner"] a[href="/i/premium"],
+  header[role="banner"] a[href$="/communities"],
+  header[role="banner"] a[href="/i/bookmarks"],
+  header[role="banner"] a[href$="/lists"] { display: none !important; }
+
+  /* no big Post pill: press "n" to compose, or use the box on Home */
+  [data-testid="SideNav_NewTweet_Button"] { display: none !important; }
+
+  /* icon-only: drop labels and the account name */
+  header[role="banner"] nav [dir="ltr"],
+  [data-testid="SideNav_AccountSwitcher_Button"] > div:not(:first-child) { display: none !important; }
+
+  /* fade away until hovered (toggle "navHide" in the style's settings) */
+  header[role="banner"] > div > div {
+    opacity: calc(1 - var(--navHide) * 0.92);
+    transition: opacity 0.2s ease !important;
+  }
+  header[role="banner"]:hover > div > div,
+  header[role="banner"]:focus-within > div > div { opacity: 1; }
+
+  /* floating chat drawer */
+  [data-testid="chat-drawer-root"] { display: none !important; }
+
+  /* like/repost/view counts: hidden until you hover the post */
+  [role="group"] [data-testid="app-text-transition-container"],
+  [role="group"] a[href$="/analytics"] { opacity: 0 !important; transition: opacity .15s ease !important; }
+  article:hover [role="group"] [data-testid="app-text-transition-container"],
+  article:hover [role="group"] a[href$="/analytics"],
+  [role="group"]:focus-within [data-testid="app-text-transition-container"] { opacity: 1 !important; }
+  /* verified badges */
+  [data-testid="icon-verified"] { display: none !important; }
+  /* right sidebar: trends, who to follow, footer (search stays) */
+  [data-testid="sidebarColumn"] section,
+  [data-testid="sidebarColumn"] aside,
+  [data-testid="sidebarColumn"] nav { display: none !important; }
+
+  /* ---------- motion ---------- */
+  *, *::before, *::after { transition-duration: 0s !important; }
+}

@@ -1,0 +1,175 @@
+/* ==UserStyle==
+@name           YouTube — Calm
+@namespace      gautham/userstyles
+@version        1.2.0
+@description    Muted, low-noise YouTube. Warm dark + paper light palettes, no Shorts/Premium/ads/shelves.
+@preprocessor   default
+@var color bg      "Background"  #181816
+@var color surface "Surface"     #20201e
+@var color line    "Borders"     #2c2c29
+@var color text    "Text"        #d6d3cc
+@var color dim     "Dim text"    #8b8881
+@var color accent  "Accent"      #e9e3d8
+@var color lbg      "Light · Background"  #f6f4ef
+@var color lsurface "Light · Surface"     #eeebe4
+@var color lline    "Light · Borders"     #e2ded5
+@var color ltext    "Light · Text"        #2b2a26
+@var color ldim     "Light · Dim text"    #77736b
+@var color laccent  "Light · Accent"      #1d1b17
+@var checkbox navHide   "Left guide: hide until hovered"  1
+==/UserStyle== */
+
+/* Follows YouTube's own Appearance setting: <html dark> gets the dark
+   palette, otherwise the light one. Colors come from YouTube's design
+   tokens (--yt-sys-color-baseline--*), so most of the UI follows along
+   without class selectors. Turn Dark Reader off for youtube.com. */
+
+@-moz-document domain("youtube.com") {
+  /* ---------- palette ---------- */
+  /* --c-* is the active palette; YouTube marks some inner surfaces [dark]
+     (player menus, overlays) even in light mode, so those get it back. */
+  html, html:not([dark]) [dark] {
+    --c-bg: var(--bg); --c-surface: var(--surface); --c-line: var(--line);
+    --c-text: var(--text); --c-dim: var(--dim); --c-accent: var(--accent);
+  }
+  html:not([dark]) {
+    --c-bg: var(--lbg); --c-surface: var(--lsurface); --c-line: var(--lline);
+    --c-text: var(--ltext); --c-dim: var(--ldim); --c-accent: var(--laccent);
+  }
+
+  html, [dark] {
+    --yt-sys-color-baseline--base-background: var(--c-bg) !important;
+    --yt-sys-color-baseline--raised-background: var(--c-surface) !important;
+    --yt-sys-color-baseline--menu-background: var(--c-surface) !important;
+    --yt-sys-color-baseline--additive-background: color-mix(in srgb, var(--c-text) 8%, transparent) !important;
+    --yt-sys-color-baseline--tonal-wash: color-mix(in srgb, var(--c-text) 5%, transparent) !important;
+    --yt-sys-color-baseline--button-chip-background-hover: color-mix(in srgb, var(--c-text) 12%, transparent) !important;
+    --yt-sys-color-baseline--mono-tonal-hover: color-mix(in srgb, var(--c-text) 12%, transparent) !important;
+    --yt-sys-color-baseline--text-primary: var(--c-text) !important;
+    --yt-sys-color-baseline--text-secondary: var(--c-dim) !important;
+    --yt-sys-color-baseline--text-disabled: color-mix(in srgb, var(--c-dim) 60%, transparent) !important;
+    --yt-sys-color-baseline--call-to-action: var(--c-accent) !important;
+    --yt-sys-color-baseline--suggested-action: color-mix(in srgb, var(--c-accent) 18%, transparent) !important;
+    --yt-sys-color-baseline--outline: var(--c-line) !important;
+    --yt-sys-color-baseline--inverted-background: var(--c-text) !important;
+    --yt-sys-color-baseline--text-primary-inverse: var(--c-bg) !important;
+    --yt-sys-color-baseline--static-brand-red: var(--c-dim) !important;
+    --yt-deprecated-general-background-a: var(--c-bg) !important;
+    --yt-deprecated-general-background-b: var(--c-bg) !important;
+    --yt-deprecated-general-background-c: var(--c-surface) !important;
+    /* older token names, still read by some components */
+    --yt-spec-base-background: var(--c-bg) !important;
+    --yt-spec-raised-background: var(--c-surface) !important;
+    --yt-spec-menu-background: var(--c-surface) !important;
+    --yt-spec-general-background-a: var(--c-bg) !important;
+    --yt-spec-general-background-b: var(--c-bg) !important;
+    --yt-spec-general-background-c: var(--c-surface) !important;
+    --yt-spec-text-primary: var(--c-text) !important;
+    --yt-spec-text-secondary: var(--c-dim) !important;
+    --yt-spec-call-to-action: var(--c-accent) !important;
+    --yt-spec-10-percent-layer: var(--c-line) !important;
+    --yt-spec-outline: var(--c-line) !important;
+    --yt-spec-badge-chip-background: color-mix(in srgb, var(--c-text) 8%, transparent) !important;
+    --app-drawer-content-container-background-color: var(--c-bg) !important;
+
+    /* newer components read hashed aliases of the same tokens (--t + 16 hex).
+       Grouped by role; the names are stable until YouTube renames a token. */
+    --t858b809f8044e962: var(--c-bg) !important;       /* base background */
+    --tdc8af6750f0dad0d: var(--c-bg) !important;
+    --t3e41d7b17b187f69: var(--c-bg) !important;
+    --t45b2a38314924357: var(--c-bg) !important;
+    --t6216186c28b3834b: var(--c-bg) !important;
+    --t5978da8d584b8fe9: color-mix(in srgb, var(--c-bg) 70%, transparent) !important; /* frosted */
+    --ta889dfda9605a358: color-mix(in srgb, var(--c-bg) 80%, transparent) !important;
+    --t518e925f61bdcb91: var(--c-surface) !important;  /* raised */
+    --t08a7c6c176cbc5c2: var(--c-surface) !important;  /* menu */
+    --te1b64e6971040396: var(--c-surface) !important;
+    --td8562cdc203bc683: var(--c-line) !important;
+    --t1405e70a39276293: var(--c-text) !important;     /* text */
+    --tffc2fd3a644f6275: var(--c-text) !important;
+    --t4a6da19e16bf221a: var(--c-dim) !important;      /* secondary text */
+    --t7e34d5baa4ea6277: color-mix(in srgb, var(--c-dim) 60%, transparent) !important;
+    --t2d807bb79e75606d: var(--c-accent) !important;   /* call to action */
+    --tfa3475c508f5dfef: color-mix(in srgb, var(--c-accent) 18%, transparent) !important;
+    --t1aab759cd9ddbe39: color-mix(in srgb, var(--c-text) 5%, transparent) !important;  /* washes */
+    --taf1bdd961423c15f: color-mix(in srgb, var(--c-text) 5%, transparent) !important;
+    --t7c4965c11f8537c0: color-mix(in srgb, var(--c-text) 8%, transparent) !important;
+    --t7f4f2c6d54836ce0: color-mix(in srgb, var(--c-text) 8%, transparent) !important;
+    --tf5f050c65aebead5: color-mix(in srgb, var(--c-text) 8%, transparent) !important;
+    --tc87f6a7f05e65fc4: color-mix(in srgb, var(--c-text) 8%, transparent) !important;
+    --ted4236536899e4b3: color-mix(in srgb, var(--c-text) 11%, transparent) !important;
+    --t53dda9125e8d1324: color-mix(in srgb, var(--c-text) 11%, transparent) !important;
+    --t20480717de80f555: color-mix(in srgb, var(--c-text) 14%, transparent) !important;
+    --t9d7bdcaefc975d44: color-mix(in srgb, var(--c-text) 14%, transparent) !important;
+    --t416e5931fc464589: color-mix(in srgb, var(--c-text) 14%, transparent) !important;
+    --tf3fc855af2285f5f: color-mix(in srgb, var(--c-text) 14%, transparent) !important;
+  }
+  #background.ytd-masthead { background: var(--c-bg) !important; }
+  #frosted-glass { background: color-mix(in srgb, var(--c-bg) 85%, transparent) !important; }
+  html[dark], html:not([dark]), body, ytd-app,
+  #guide-skeleton, #home-container-skeleton, #home-chips { background-color: var(--c-bg) !important; }
+
+  /* logo and progress bar: no red */
+  ytd-topbar-logo-renderer #logo-icon { filter: grayscale(1); opacity: 0.8; }
+  .ytp-play-progress, .ytp-swatch-background-color,
+  .ytp-scrubber-button, ytd-thumbnail-overlay-resume-playback-renderer #progress {
+    background: var(--c-accent) !important;
+  }
+
+  /* ---------- reading ---------- */
+  ytd-thumbnail img, yt-thumbnail-view-model img, .yt-core-image { filter: saturate(0.85); }
+
+  /* ---------- noise removal ---------- */
+  /* Shorts: guide entry, home shelf, search/related shelves and items */
+  ytd-guide-entry-renderer:has(a[title="Shorts"]),
+  ytd-mini-guide-entry-renderer:has(a[title="Shorts"]),
+  ytd-mini-guide-entry-renderer[aria-label="Shorts"],
+  ytd-reel-shelf-renderer, grid-shelf-view-model,
+  ytd-rich-shelf-renderer[is-shorts],
+  ytd-rich-item-renderer:has(a[href^="/shorts/"]),
+  ytd-video-renderer:has(a[href^="/shorts/"]),
+  ytd-compact-video-renderer:has(a[href^="/shorts/"]),
+  yt-lockup-view-model:has(a[href^="/shorts/"]) { display: none !important; }
+
+  /* home: shelves that interrupt the grid (Shorts, Playables, news, trending) */
+  ytd-browse[page-subtype="home"] ytd-rich-section-renderer { display: none !important; }
+  /* home: category chip bar */
+  ytd-browse[page-subtype="home"] ytd-feed-filter-chip-bar-renderer,
+  ytd-browse[page-subtype="home"] #chips-wrapper { display: none !important; }
+  ytd-app:has(ytd-browse[page-subtype="home"]:not([hidden])) #frosted-glass { display: none !important; }
+  /* shelves elsewhere: breaking news, trending, "people also watched" */
+  ytd-shelf-renderer:has(#title-text a[href*="trending"]),
+  ytd-horizontal-card-list-renderer,
+  ytd-search-refinement-card-renderer { display: none !important; }
+
+  /* Premium / upsells / ads */
+  ytd-guide-section-renderer:has(a[href="/premium"]),
+  ytd-guide-section-renderer:has(a[href="/feed/storefront"]),
+  ytd-guide-renderer #footer,
+  ytd-mealbar-promo-renderer, ytd-statement-banner-renderer, ytd-banner-promo-renderer,
+  ytd-primetime-promo-renderer, ytd-brand-video-singleton-renderer, ytd-merch-shelf-renderer,
+  #masthead-ad, #player-ads, ytd-ad-slot-renderer, ytd-in-feed-ad-layout-renderer,
+  ytd-promoted-sparkles-web-renderer, ytd-promoted-video-renderer,
+  ytd-rich-item-renderer:has(ytd-ad-slot-renderer),
+  ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-ads"] { display: none !important; }
+
+  /* notification bell: no count */
+  ytd-notification-topbar-button-renderer .yt-spec-icon-badge-shape__badge,
+  ytd-notification-topbar-button-renderer #notification-count { display: none !important; }
+
+  /* player: end-screen cards, info cards, pause overlays */
+  .ytp-ce-element, .ytp-cards-teaser, .ytp-cards-button, .ytp-endscreen-content,
+  .ytp-pause-overlay, .ytp-paid-content-overlay, .ytp-suggested-action,
+  .ytp-featured-product, .iv-branding { display: none !important; }
+
+  /* ---------- left guide: fade away until hovered ("navHide" in settings) ---------- */
+  tp-yt-app-drawer#guide #guide-content,
+  ytd-mini-guide-renderer {
+    opacity: calc(1 - var(--navHide) * 0.92);
+    transition: opacity 0.2s ease !important;
+  }
+  tp-yt-app-drawer#guide:hover #guide-content,
+  tp-yt-app-drawer#guide:focus-within #guide-content,
+  ytd-mini-guide-renderer:hover,
+  ytd-mini-guide-renderer:focus-within { opacity: 1; }
+}
