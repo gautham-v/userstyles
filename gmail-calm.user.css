@@ -1,7 +1,7 @@
 /* ==UserStyle==
 @name           Gmail — Calm
 @namespace      gautham/userstyles
-@version        1.2.0
+@version        1.2.2
 @description    Light-touch Gmail: warm dark + paper light palettes, no Gemini/side panel/storage/footer noise.
 @preprocessor   default
 @var color bg      "Background"  #181816
@@ -83,6 +83,13 @@
   .hP, .gD, .ii, .a3s { color: var(--text) !important; }
   .g3, .go, .hb, .ajn { color: var(--dim) !important; }
   .a3s a, .aeF a[href]:not([role]) { color: var(--accent) !important; }
+  /* Reply / Forward bar under a thread (GM3 paints it white) */
+  .amr .nr, .gA, .ip.iq { background-color: var(--bg) !important; }
+  .amn .ams { background-color: var(--bg) !important; color: var(--text) !important;
+              border-color: var(--line) !important; }
+  .amn .ams:hover { background-color: var(--surface) !important; }
+  /* attachment strip: "One attachment · Scanned by Gmail", file names */
+  .hq.gt .aVW, .hq.gt .aVW *, .hq.gt .aXL { color: var(--dim) !important; }
 
   /* menus, dialogs, compose window */
   .J-M, .Kj-JD, .AD, .aoI, .I5, .aoD { background-color: var(--bg) !important; color: var(--text) !important; }
@@ -91,7 +98,8 @@
   @media (prefers-color-scheme: dark) {
     .aeN .qj, .aeN .TN .aHS-bnt, .G-atb .asa, .G-atb .asf, .aeH .asa, .asa,
     header[role="banner"] svg:not([class*="logo"]), form[role="search"] svg,
-    .T-I-KE .aic, .bjy, .aeN svg { filter: invert(0.85) !important; }
+    .T-I-KE .aic, .bjy, .aeN svg,
+    .amn .ams::before, .amn svg { filter: invert(0.85) !important; }
     .aic .T-I-KE::before { filter: invert(0.85) !important; }
   }
 
