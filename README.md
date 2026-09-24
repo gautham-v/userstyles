@@ -17,6 +17,14 @@ ads, upsells, AI panels and engagement bait.
 | [Yahoo Fantasy](https://raw.githubusercontent.com/gautham-v/userstyles/main/yahoo-fantasy-calm.user.css) | Ads, betting, Plus upsells, video |
 | [YouTube](https://raw.githubusercontent.com/gautham-v/userstyles/main/youtube-calm.user.css) | Shorts, Premium, ads, shelves |
 
+## Screenshots
+
+| | |
+| --- | --- |
+| ![YouTube](screenshots/youtube.jpg) YouTube | ![X](screenshots/x.jpg) X |
+| ![LinkedIn](screenshots/linkedin.jpg) LinkedIn | ![Reddit](screenshots/reddit.jpg) Reddit |
+| ![ESPN](screenshots/espn.jpg) ESPN | ![DuckDuckGo](screenshots/duckduckgo.jpg) DuckDuckGo |
+
 ## Install
 
 1. Install [Stylus](https://add0n.com/stylus.html) for Firefox or Chrome.
